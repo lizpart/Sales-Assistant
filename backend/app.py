@@ -75,6 +75,29 @@ class ProposalRequest(BaseModel):
     pain_points: Optional[List[str]] = None
     budget_range: Optional[str] = None
 
+class Lead(BaseModel):
+    id: str
+    name: str
+    score: float
+    industry: Optional[str] = None
+    last_contact: Optional[str] = None
+    deal_size: Optional[float] = None
+
+# Dummy leads data for demonstration
+LEADS_DATA = [
+    {"id": "L001", "name": "John Doe", "score": 92.5, "industry": "agriculture", "last_contact": "2024-06-01", "deal_size": 10000},
+    {"id": "L002", "name": "Jane Smith", "score": 88.0, "industry": "construction", "last_contact": "2024-05-28", "deal_size": 15000},
+    {"id": "L003", "name": "Acme Corp", "score": 85.2, "industry": "residential", "last_contact": "2024-05-30", "deal_size": 12000},
+    {"id": "L004", "name": "Beta Ltd", "score": 80.1, "industry": "agriculture", "last_contact": "2024-05-25", "deal_size": 9000},
+    {"id": "L005", "name": "Gamma Inc", "score": 78.9, "industry": "construction", "last_contact": "2024-05-20", "deal_size": 20000},
+    {"id": "L006", "name": "Delta Partners", "score": 75.0, "industry": "residential", "last_contact": "2024-05-18", "deal_size": 8000},
+    {"id": "L007", "name": "Omega Group", "score": 73.5, "industry": "agriculture", "last_contact": "2024-05-15", "deal_size": 9500},
+    {"id": "L008", "name": "Sigma LLC", "score": 70.2, "industry": "construction", "last_contact": "2024-05-10", "deal_size": 11000},
+    {"id": "L009", "name": "Zeta Holdings", "score": 68.7, "industry": "residential", "last_contact": "2024-05-08", "deal_size": 10500},
+    {"id": "L010", "name": "Theta Solutions", "score": 65.3, "industry": "agriculture", "last_contact": "2024-05-05", "deal_size": 7000},
+    {"id": "L011", "name": "Lambda Ventures", "score": 60.0, "industry": "construction", "last_contact": "2024-05-01", "deal_size": 6000},
+]
+
 # Get pump details from ERP
 def get_pump_from_erp(model_name: str):
     """
@@ -451,6 +474,32 @@ def get_optimal_follow_up(customer_id: str):
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/api/top-leads", response_model=List[Lead])
+def get_top_leads(
+    industry: Optional[str] = Query(None, description="Filter by industry"),
+    sort_by: Optional[str] = Query("score", description="Sort by field: score, deal_size, last_contact"),
+    order: Optional[str] = Query("desc", description="Sort order: asc or desc"),
+    limit: int = Query(10, description="Number of leads to return"),
+):
+    """
+    Returns the top leads ranked by score, with optional filtering and sorting.
+    """
+    leads = LEADS_DATA.copy()
+
+    # Filter by industry if provided
+    if industry:
+        leads = [lead for lead in leads if lead["industry"] == industry.lower()]
+
+    # Sorting
+    reverse = order == "desc"
+    if sort_by in {"score", "deal_size"}:
+        leads.sort(key=lambda x: x.get(sort_by, 0), reverse=reverse)
+    elif sort_by == "last_contact":
+        leads.sort(key=lambda x: x.get("last_contact", ""), reverse=reverse)
+
+    # Return top N leads
+    return leads[:limit]
 
 if __name__ == "__main__":
     import uvicorn
