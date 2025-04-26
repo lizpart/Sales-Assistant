@@ -42,7 +42,7 @@ A full-stack web application to help sales teams optimize their conversion proce
 ### 1. Clone the Repository
 
 ```sh
-git clone https://github.com/yourusername/sales-assistant.git
+git clone https://github.com/lizpart/Dashboard.git
 cd sales-assistant
 ```
 
