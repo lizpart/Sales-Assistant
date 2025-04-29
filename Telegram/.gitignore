@@ -1,0 +1,68 @@
+.env
+
+node_modules
+dist
+.vscode
+
+.vscode-test
+
+# macOS
+*.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Linux
+*~
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv environment variable files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# next.js build output
+.next/
+out/
+
+# nuxt.js build output
+.nuxt/
+dist/
+.cache/
+*.local
+
+# vuepress build output
+.vuepress/dist
+
+# vue-cli generated files
+dist/
+node_modules/
+
+# Serverless directories and files
+.serverless/
+.serverless_plugins/
+serverless-*.json
+
+# Miscellaneous files
+.idea/
+.vscode/
+*.swp
+
+# MacOS system files
+*.DS_Store
+
+# Windows system files
+Thumbs.db
+
+# Linux system files
+*~
